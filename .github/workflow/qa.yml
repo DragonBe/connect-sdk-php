@@ -1,0 +1,52 @@
+---
+name: Quality Assurance
+on:
+  push:
+    paths:
+      - src/**/*.php
+      - .github/workflows/qa.yml
+  pull_request:
+    paths:
+      - src/**/*.php
+      - .github/workflows/qa.yml
+
+jobs:
+  build:
+    name: QA Jobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set default PHP version 7.4
+        run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
+
+      - name: Display current PHP version
+        run: php --version
+
+      - uses: actions/checkout@v2
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Prepare for Quality
+        run: /bin/sh -c 'mkdir -p ${{ github.workspace }}/build/logs && touch ${{ github.workspace }}/build/logs/checkstyle.xml'
+
+      - name: Create QA config from dist files
+        run: /bin/sh -c 'for i in phpcs.xml phpunit.xml; do cp ${{ github.workspace }}/$i.dist ${{ github.workspace }}/$i; done'
+
+      - name: Run PHP CodeSniffer
+        run: ${{ github.workspace }}/vendor/bin/phpcs
+
+      - name: Run PHPUnit
+        run: php -dxdebug.mode=coverage ${{ github.workspace }}/vendor/bin/phpunit

@@ -1,0 +1,7 @@
+/.phpunit.cache
+/build
+/examples
+/vendor
+/composer.lock
+/*.phar
+/*.xml
