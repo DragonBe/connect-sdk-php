@@ -5,6 +5,8 @@ namespace OnePassword\ConnectTest;
 
 use Iterator;
 use OnePassword\Connect\AbstractOnePasswordClient;
+use OnePassword\Connect\Model\Item;
+use OnePassword\Connect\Model\ItemHydrator;
 use OnePassword\Connect\Model\Vault;
 use OnePassword\Connect\Model\VaultHydrator;
 use OnePassword\Connect\Model\VaultInterface;
@@ -21,7 +23,9 @@ class OnePasswordConnectTest extends TestCase
      * @covers \OnePassword\Connect\OnePasswordConnect::__construct
      * @covers \OnePassword\Connect\OnePasswordConnect::listVaults
      * @covers \OnePassword\Connect\OnePasswordConnect::extractData
+     * @covers \OnePassword\Connect\Model\Item::__construct
      * @covers \OnePassword\Connect\Model\Vault::__construct
+     * @covers \OnePassword\Connect\Model\ItemHydrator::__construct
      * @covers \OnePassword\Connect\Model\VaultHydrator::hydrate
      */
     public function testConnectorCanListVaults(): void
@@ -29,7 +33,15 @@ class OnePasswordConnectTest extends TestCase
         $client = $this->createStubClient('vault_collection.json');
         $vaultHydrator = new VaultHydrator();
         $vaultPrototype = new Vault();
-        $onePasswordConnect = new OnePasswordConnect($client, $vaultHydrator, $vaultPrototype);
+        $itemHydrator = new ItemHydrator();
+        $itemPrototype = new Item();
+        $onePasswordConnect = new OnePasswordConnect(
+            $client,
+            $vaultHydrator,
+            $vaultPrototype,
+            $itemHydrator,
+            $itemPrototype
+        );
         $vaults = $onePasswordConnect->listVaults();
         $this->assertInstanceOf(Iterator::class, $vaults);
         $this->assertSame(3, \iterator_count($vaults));
@@ -43,8 +55,11 @@ class OnePasswordConnectTest extends TestCase
      * @covers \OnePassword\Connect\OnePasswordConnect::__construct
      * @covers \OnePassword\Connect\OnePasswordConnect::getVault
      * @covers \OnePassword\Connect\OnePasswordConnect::extractData
+     * @covers \OnePassword\Connect\Model\Item::__construct
      * @covers \OnePassword\Connect\Model\Vault::__construct
      * @covers \OnePassword\Connect\Model\Vault::getId
+     * @covers \OnePassword\Connect\Model\ItemHydrator::__construct
+     * @covers \OnePassword\Connect\Model\ItemHydrator::hydrate
      * @covers \OnePassword\Connect\Model\VaultHydrator::hydrate
      */
     public function testConnectorCanRetrieveSingleVault(): void
@@ -53,7 +68,15 @@ class OnePasswordConnectTest extends TestCase
         $client = $this->createStubClient('vault.json');
         $vaultHydrator = new VaultHydrator();
         $vaultPrototype = new Vault();
-        $onePasswordConnect = new OnePasswordConnect($client, $vaultHydrator, $vaultPrototype);
+        $itemHydrator = new ItemHydrator();
+        $itemPrototype = new Item();
+        $onePasswordConnect = new OnePasswordConnect(
+            $client,
+            $vaultHydrator,
+            $vaultPrototype,
+            $itemHydrator,
+            $itemPrototype
+        );
         $vault = $onePasswordConnect->getVault($vaultId);
         $this->assertInstanceOf(VaultInterface::class, $vault);
         $this->assertSame($vaultId, $vault->getId());

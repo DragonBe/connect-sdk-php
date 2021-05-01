@@ -4,18 +4,28 @@ namespace OnePassword\Connect\Model;
 
 class VaultHydrator implements HydratorInterface
 {
-
+    private const PROTO_ARRAY = [
+        'id' => '',
+        'name' => '',
+        'attributeVersion' => 0,
+        'contentVersion' => 0,
+        'items' => 0,
+        'type' => '',
+        'createdAt' => '',
+        'updatedAt' => '',
+    ];
     public function hydrate(object $object, array $data): object
     {
+        $entry = array_merge(self::PROTO_ARRAY, $data);
         return new Vault(
-            $data['id'],
-            $data['name'],
-            $data['attributeVersion'],
-            $data['contentVersion'],
-            $data['items'],
-            $data['type'],
-            $data['createdAt'],
-            $data['updatedAt']
+            $entry['id'] ?: '',
+            $entry['name'] ?: '',
+            $entry['attributeVersion'] ?: 0,
+            $entry['contentVersion'] ?: 0,
+            $entry['items'] ?: 0,
+            $entry['type'] ?: '',
+            $entry['createdAt'] ?: '',
+            $entry['updatedAt'] ?: ''
         );
     }
 

@@ -11,6 +11,7 @@ class Item implements ItemInterface
     private string $title;
     private ?VaultInterface $vault;
     private string $category;
+    private array $sections;
     private ?Iterator $fields;
     private ?Iterator $urls;
     private bool $favourite;
@@ -25,7 +26,11 @@ class Item implements ItemInterface
      * Item constructor.
      * @param string $id
      * @param string $title
+     * @param VaultInterface|null $vault
      * @param string $category
+     * @param array $sections
+     * @param Iterator|null $fields
+     * @param Iterator|null $urls
      * @param bool $favourite
      * @param array $tags
      * @param int $version
@@ -33,28 +38,30 @@ class Item implements ItemInterface
      * @param string $createdAt
      * @param string $updatedAt
      * @param string $lastEditedBy
-     * @param VaultInterface|null $vault
-     * @param Iterator|null $fields;
-     * @param Iterator|null $urls
      */
     public function __construct(
         string $id = '',
         string $title = '',
+        ?VaultInterface $vault = null,
         string $category = '',
+        array $sections = [],
+        ?Iterator $fields = null,
+        ?Iterator $urls = null,
         bool $favourite = false,
         array $tags = [],
         int $version = 0,
         bool $trashed = false,
         string $createdAt = '',
         string $updatedAt = '',
-        string $lastEditedBy = '',
-        ?VaultInterface $vault = null,
-        ?Iterator $fields = null,
-        ?Iterator $urls = null
+        string $lastEditedBy = ''
     ) {
         $this->id = $id;
         $this->title = $title;
+        $this->vault = $vault;
         $this->category = $category;
+        $this->sections = $sections;
+        $this->fields = $fields;
+        $this->urls = $urls;
         $this->favourite = $favourite;
         $this->tags = $tags;
         $this->version = $version;
@@ -62,9 +69,6 @@ class Item implements ItemInterface
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->lastEditedBy = $lastEditedBy;
-        $this->vault = $vault;
-        $this->fields = $fields;
-        $this->urls = $urls;
     }
 
     /**
@@ -97,6 +101,14 @@ class Item implements ItemInterface
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSections(): array
+    {
+        return $this->sections;
     }
 
     /**

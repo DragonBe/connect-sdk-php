@@ -11,6 +11,7 @@ interface ItemInterface
     public function getTitle(): string;
     public function getVault(): ?VaultInterface;
     public function getCategory(): string;
+    public function getSections(): array;
     public function getFields(): ?Iterator;
     public function getUrls(): ?Iterator;
     public function isFavourite(): bool;
