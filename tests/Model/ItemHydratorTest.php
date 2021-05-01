@@ -22,8 +22,9 @@ class ItemHydratorTest extends TestCase
      * @covers \OnePassword\Connect\Model\ItemHydrator::__construct
      * @covers \OnePassword\Connect\Model\ItemHydrator::hydrate
      * @covers \OnePassword\Connect\Model\AbstractReflectionHydrator::hydrate
+     * @covers \OnePassword\Connect\Model\AbstractReflectionHydrator::reflect
      * @covers \OnePassword\Connect\Model\Vault::__construct
-     * @covers \OnePassword\Connect\Model\Vault::hydrate
+     * @covers \OnePassword\Connect\Model\VaultHydrator::hydrate
      */
     public function testItemHydration(): void
     {
@@ -80,5 +81,32 @@ class ItemHydratorTest extends TestCase
         $this->assertSame('id', $data['id']);
         $this->assertArrayHasKey('title', $data);
         $this->assertSame('test data', $data['title']);
+    }
+
+    /**
+     * @covers \OnePassword\Connect\Model\Item::__construct
+     * @covers \OnePassword\Connect\Model\Item::getId
+     * @covers \OnePassword\Connect\Model\Item::getTitle
+     * @covers \OnePassword\Connect\Model\ItemHydrator::__construct
+     * @covers \OnePassword\Connect\Model\ItemHydrator::hydrate
+     * @covers \OnePassword\Connect\Model\AbstractReflectionHydrator::hydrate
+     * @covers \OnePassword\Connect\Model\AbstractReflectionHydrator::reflect
+     * @covers \OnePassword\Connect\Model\Vault::__construct
+     */
+    public function testItemRandomOrderHydration(): void
+    {
+        $data = [
+            'id' => '1234567',
+            'createdAt' => '2021-04-10T17:20:05.98944527Z',
+            'category' => 'TEST',
+            'title' => 'This is a random test',
+        ];
+        $itemPrototype = new Item();
+        $vaultHydrator = new VaultHydrator();
+        $vaultPrototype = new Vault();
+        $itemHydrator = new ItemHydrator($vaultHydrator, $vaultPrototype);
+        $item = $itemHydrator->hydrate($itemPrototype, $data);
+        $this->assertSame($data['id'], $item->getId());
+        $this->assertSame($data['title'], $item->getTitle());
     }
 }
