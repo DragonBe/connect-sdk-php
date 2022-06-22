@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "php": ">=7.4",
+        "php": "^8.0||^8.1",
         "ext-json": "*",
         "psr/http-client": "^1.0",
         "psr/http-factory": "^1.0",
@@ -25,7 +25,6 @@
         "guzzlehttp/guzzle": "^7.3",
         "guzzlehttp/psr7": "^1.8",
         "infection/infection": "^0.22.1",
-        "phing/phing": "^2.16",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.6",
         "vimeo/psalm": "^4.7"
@@ -37,5 +36,24 @@
             "email": "dragonbe+github@gmail.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    },
+    "scripts": {
+        "csp-check": "phpcs",
+        "csp-test": "phpunit",
+        "csp-mutate": "infection",
+        "csp-secure": "psalm",
+        "csp-qa": ["@csp-check", "@csp-test", "@csp-mutate", "@csp-secure"]
+    },
+    "scripts-descriptions": {
+        "csp-check": "Connect SDK for PHP - Check coding style",
+        "csp-test": "Connect SDK for PHP - Run unit tests",
+        "csp-mutate": "Connect SDK for PHP - Perform mutation testing",
+        "csp-secure": "Connect SDK for PHP - Improve security with Psalm",
+        "csp-qa": "Connect SDK for PHP - Run all checks at once"
+    }
 }
