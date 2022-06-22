@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace OnePassword\Connect;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Client\ClientInterface as Client;
 
 final class OnePasswordClient extends AbstractOnePasswordClient
 {
@@ -39,7 +39,7 @@ final class OnePasswordClient extends AbstractOnePasswordClient
         string $endPoint,
         array $additionalHeaders = [],
         string $body = ''
-    ): ResponseInterface {
+    ): Response {
         $uri = sprintf('%s/%s/%s', $this->baseUri, self::API_VERSION, $endPoint);
         $headers = [
             'User-Agent' => self::USER_AGENT,
@@ -49,7 +49,7 @@ final class OnePasswordClient extends AbstractOnePasswordClient
         return $this->client->request($method, $uri, ['headers' => $headers]);
     }
 
-    public function makeRequest(Request $request): ResponseInterface
+    public function makeRequest(Request $request): Response
     {
         return $this->client->send($request);
     }

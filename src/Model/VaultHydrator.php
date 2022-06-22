@@ -14,6 +14,10 @@ class VaultHydrator implements HydratorInterface
         'createdAt' => '',
         'updatedAt' => '',
     ];
+
+    /**
+     * @inheritDoc
+     */
     public function hydrate(object $object, array $data): object
     {
         $entry = array_merge(self::PROTO_ARRAY, $data);
@@ -29,6 +33,9 @@ class VaultHydrator implements HydratorInterface
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function extract(object $object): array
     {
         if (! $object instanceof VaultInterface) {

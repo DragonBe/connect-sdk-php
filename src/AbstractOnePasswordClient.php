@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace OnePassword\Connect;
 
-use GuzzleHttp\Psr7\Request;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Client\ClientInterface as Client;
+use Psr\Http\Message\ResponseInterface as Response;
 
 abstract class AbstractOnePasswordClient
 {
-    protected ClientInterface $client;
+    protected Client $client;
 
     /**
      * AbstractOnePasswordClient constructor.
      *
-     * @param ClientInterface $client
+     * @param Client $client
      */
-    public function __construct(ClientInterface $client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
     }
@@ -26,7 +26,7 @@ abstract class AbstractOnePasswordClient
         string $endPoint,
         array $additionalHeaders = [],
         string $body = ''
-    ): ResponseInterface;
+    ): Response;
 
-    abstract public function makeRequest(Request $request): ResponseInterface;
+    abstract public function makeRequest(Request $request): Response;
 }

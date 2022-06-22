@@ -18,9 +18,12 @@ class ItemHydrator extends AbstractReflectionHydrator
         $this->vaultPrototype = $vaultPrototype;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function hydrate(object $object, array $data): object
     {
-        if (array_key_exists('vault', $data)) {
+        if (array_key_exists('vault', $data) && (null !== $this->vaultHydrator)) {
             $data['vault'] = $this->vaultHydrator->hydrate($this->vaultPrototype, $data['vault']);
         }
         if (! array_key_exists('fields', $data)) {
@@ -38,6 +41,9 @@ class ItemHydrator extends AbstractReflectionHydrator
         return parent::hydrate($object, $data);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function extract(object $object): array
     {
         return parent::extract($object);

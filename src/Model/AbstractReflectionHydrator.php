@@ -27,7 +27,7 @@ abstract class AbstractReflectionHydrator implements HydratorInterface
         return $array;
     }
 
-    private function reflect($object, $data): object
+    private function reflect(object $object, array $data): object
     {
         $reflectionObject = new ReflectionClass($object);
         foreach (array_keys($data) as $key) {
