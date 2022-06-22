@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set default PHP version 7.4
-        run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
+      - name: Set default PHP version 8.1
+        run: sudo ln -snf /usr/bin/php8.1 /usr/bin/php
 
       - name: Display current PHP version
         run: php --version
